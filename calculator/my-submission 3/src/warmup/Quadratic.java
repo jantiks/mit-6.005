@@ -15,18 +15,12 @@ public class Quadratic {
      */
     public static Set<Integer> roots(int a, int b, int c) {
         Set<Integer> roots = new HashSet<Integer>();
-        
-        System.out.println("this are params: " + a + ": " + b + ": " + c);
         double discriminant = b * b - 4 * a * c;
-        
-//        assert discriminant < 0: "the discriminant is less than 0";
-        
         double root1 = (-b + Math.sqrt(discriminant)) / (2) / a;
         double root2 = (-b - Math.sqrt(discriminant)) / (2) / a;
         roots.add((int)root1);
         roots.add((int)root2);
         
-        System.out.println("this are roots " + roots);
         return roots;
     }
 
@@ -37,7 +31,7 @@ public class Quadratic {
      */
     public static void main(String[] args) {
         System.out.println("For the equation x^2 - 4x + 3 = 0, the possible solutions are:");
-        Set<Integer> result = roots(1, 3, 3);
+        Set<Integer> result = roots(1, -4, 3);
         System.out.println(result);
     }
 
