@@ -17,9 +17,12 @@ public class ExtractTest {
     
     private static final Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
     private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
-    
-    private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk about rivest so much?", d1);
+    private static final Instant d3 = Instant.parse("2015-02-17T22:00:00Z");
+
+
+    private static final Tweet tweet1 = new Tweet(1, "@alyssa", "is it reasonable to talk about rivest so much?", d1);
     private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
+    private static final Tweet tweet3 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d3);
     
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
@@ -28,9 +31,10 @@ public class ExtractTest {
     
     @Test
     public void testGetTimespanTwoTweets() {
-        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2));
-        
-        assertEquals("expected start", d1, timespan.getStart());
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet3, tweet2));
+
+
+        assertEquals("expected start", d3, timespan.getStart());
         assertEquals("expected end", d2, timespan.getEnd());
     }
     

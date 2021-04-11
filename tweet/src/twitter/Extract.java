@@ -1,7 +1,7 @@
 package twitter;
 
-import java.util.List;
-import java.util.Set;
+import java.time.Instant;
+import java.util.*;
 
 /**
  * Extract consists of methods that extract information from a list of tweets.
@@ -21,7 +21,14 @@ public class Extract {
      *         every tweet in the list.
      */
     public static Timespan getTimespan(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        if (tweets.isEmpty()) {
+
+        }
+        List<Tweet> sortedTweets = sort(tweets);
+        Instant start = sortedTweets.get(0).getTimestamp();
+        Instant end = sortedTweets.get(sortedTweets.size() - 1).getTimestamp();
+        Timespan timespan = new Timespan(start, end);
+        return  timespan;
     }
 
     /**
@@ -40,9 +47,46 @@ public class Extract {
      *         include a username at most once.
      */
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Set<String> set = new HashSet<String>();
+        return set;
+    }
+    /**
+     @param tweets
+                list of tweets
+     @return sorted tweets list by their Instant.
+     */
+    private static List<Tweet> sort(List<Tweet> tweets) {
+        List<Tweet> sortedTweets = tweets;
+
+        for (int i = 0; i < tweets.size(); i++) {
+            Tweet first = tweets.get(i);
+            for (int j = i; j < tweets.size(); j++) {
+                Tweet second = tweets.get(j);
+                if (first.getTimestamp().isAfter(second.getTimestamp())) {
+                    sortedTweets = swap(sortedTweets, i, j);
+                }
+            }
+        }
+        return tweets;
     }
 
+    /**
+     *
+     * @param tweets
+     *          the list that should be swaped
+     * @param first
+     *           first index
+     * @param second
+     *           second index
+     * @return swaped list
+     *
+     */
+    private static List<Tweet> swap(List<Tweet> tweets, int first, int second) {
+        Tweet c = tweets.get(first);
+        tweets.set(first, tweets.get(second));
+        tweets.set(second, c);
+        return  tweets;
+    }
     /* Copyright (c) 2007-2016 MIT 6.005 course staff, all rights reserved.
      * Redistribution of original or derived work requires explicit permission.
      * Don't post any of this code on the web or to a public Github repository.
