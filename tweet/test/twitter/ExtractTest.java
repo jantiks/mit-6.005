@@ -2,6 +2,7 @@ package twitter;
 
 import static org.junit.Assert.*;
 
+import java.sql.Time;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Set;
@@ -16,7 +17,7 @@ public class ExtractTest {
      */
     
     private static final Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
-    private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
+    private static final Instant d2 = Instant.parse("2017-02-17T11:00:00Z");
     private static final Instant d3 = Instant.parse("2015-02-17T22:00:00Z");
 
 
@@ -30,12 +31,29 @@ public class ExtractTest {
     }
     
     @Test
-    public void testGetTimespanTwoTweets() {
+    public void testGetTimespanTwoSortedTweets() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2));
+
+
+        assertEquals("expected start", d1, timespan.getStart());
+        assertEquals("expected end", d2, timespan.getEnd());
+    }
+
+    @Test
+    public void testGetTimespanUnsortedTweets() {
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet3, tweet2));
 
+        assertEquals("expected start", tweet3.getTimestamp(), timespan.getStart());
+        assertEquals("expected end", tweet2.getTimestamp(), timespan.getEnd());
+    }
 
-        assertEquals("expected start", d3, timespan.getStart());
-        assertEquals("expected end", d2, timespan.getEnd());
+
+    @Test
+    public void testGetTimespanZeroTweets() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList());
+
+        assertEquals("expected start", timespan.getEnd(), timespan.getStart());
+
     }
     
     @Test

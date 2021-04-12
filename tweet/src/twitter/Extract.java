@@ -1,5 +1,6 @@
 package twitter;
 
+import java.sql.Time;
 import java.time.Instant;
 import java.util.*;
 
@@ -22,12 +23,17 @@ public class Extract {
      */
     public static Timespan getTimespan(List<Tweet> tweets) {
         if (tweets.isEmpty()) {
-
+            Instant instant = Instant.now();
+            Timespan timespan = new Timespan(instant, instant);
+            return timespan;
         }
+
         List<Tweet> sortedTweets = sort(tweets);
         Instant start = sortedTweets.get(0).getTimestamp();
         Instant end = sortedTweets.get(sortedTweets.size() - 1).getTimestamp();
         Timespan timespan = new Timespan(start, end);
+        System.out.println("this are tweets " + sortedTweets);
+
         return  timespan;
     }
 
@@ -58,16 +64,16 @@ public class Extract {
     private static List<Tweet> sort(List<Tweet> tweets) {
         List<Tweet> sortedTweets = tweets;
 
-        for (int i = 0; i < tweets.size(); i++) {
-            Tweet first = tweets.get(i);
-            for (int j = i; j < tweets.size(); j++) {
-                Tweet second = tweets.get(j);
-                if (first.getTimestamp().isAfter(second.getTimestamp())) {
+        for (int i = 0; i < sortedTweets.size(); i++) {
+            Tweet first = sortedTweets.get(i);
+            for (int j = 0; j < i; j++) {
+                Tweet second = sortedTweets.get(j);
+                if (first.getTimestamp().isBefore(second.getTimestamp())) {
                     sortedTweets = swap(sortedTweets, i, j);
                 }
             }
         }
-        return tweets;
+        return sortedTweets;
     }
 
     /**
@@ -85,6 +91,7 @@ public class Extract {
         Tweet c = tweets.get(first);
         tweets.set(first, tweets.get(second));
         tweets.set(second, c);
+        System.out.println("swaped " + c + " to " + tweets.get(first));
         return  tweets;
     }
     /* Copyright (c) 2007-2016 MIT 6.005 course staff, all rights reserved.
