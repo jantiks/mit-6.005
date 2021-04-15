@@ -54,6 +54,9 @@ public class Extract {
      */
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
         Set<String> set = new HashSet<String>();
+        for (int i = 0; i < tweets.size(); i++) {
+            set.addAll(getUsers(tweets.get(i).getText()));
+        }
         return set;
     }
     /**
@@ -93,6 +96,43 @@ public class Extract {
         tweets.set(second, c);
         System.out.println("swaped " + c + " to " + tweets.get(first));
         return  tweets;
+    }
+
+    public static Set<String> getUsers(String text) {
+        String[] allWords = splitWords(text);
+        Set<String> usernames = getUserNames(allWords);
+        return usernames;
+    }
+
+    /**
+     * returns an array of strings which contains all words of passed text
+     * @param text , the text wihchs words should be splited
+     * @return
+     *        array of String[]
+     */
+    private static String[] splitWords(String text) {
+        String[] allWords = text.split(" ");
+        return allWords;
+    }
+
+    /**
+     *
+     * @param usernames
+     *        possible usernames
+     * @return
+     *        array of usernames
+     */
+    private static Set<String> getUserNames(String[] usernames) {
+
+        Set<String> returnUsernames = new HashSet<>();
+        for (int i = 0; i < usernames.length; i++) {
+            String firstCharacter = String.valueOf(usernames[i].charAt(0));
+            if (firstCharacter.equals("@")) {
+                returnUsernames.add(usernames[i]);
+            }
+        }
+
+        return returnUsernames;
     }
     /* Copyright (c) 2007-2016 MIT 6.005 course staff, all rights reserved.
      * Redistribution of original or derived work requires explicit permission.
