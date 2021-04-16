@@ -1,5 +1,6 @@
 package twitter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,17 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> usernameTweets = new ArrayList<>();
+
+        for (int i = 0; i < tweets.size(); i++) {
+            Tweet tweet = tweets.get(i);
+
+            if (tweet.getAuthor().equals(username)) {
+                usernameTweets.add(tweet);
+            }
+        }
+
+        return  usernameTweets;
     }
 
     /**
@@ -38,7 +49,17 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> tweetsDuringTimespan = new ArrayList<>();
+
+        for (int i = 0 ; i < tweets.size(); i++) {
+            Tweet tweet = tweets.get(i);
+            if (tweet.getTimestamp().isAfter(timespan.getStart()) && tweet.getTimestamp().isBefore(timespan.getEnd())) {
+                tweetsDuringTimespan.add(tweet);
+            }
+        }
+
+        return  tweetsDuringTimespan;
+
     }
 
     /**
@@ -57,7 +78,20 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> tweetsContainingWord = new ArrayList<>();
+
+        for (int i = 0; i < tweets.size(); i++) {
+            Tweet tweet = tweets.get(i);
+
+            for (int j = 0 ; j < words.size(); j++) {
+                if (tweet.getText().contains(words.get(j))) {
+                    tweetsContainingWord.add(tweet);
+                    break;
+                }
+            }
+        }
+
+        return tweetsContainingWord;
     }
 
     /* Copyright (c) 2007-2016 MIT 6.005 course staff, all rights reserved.
