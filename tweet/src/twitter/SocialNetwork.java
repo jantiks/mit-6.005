@@ -1,8 +1,6 @@
 package twitter;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * SocialNetwork provides methods that operate on a social network.
@@ -38,7 +36,23 @@ public class SocialNetwork {
      *         either authors or @-mentions in the list of tweets.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Map<String, Set<String>> followerGraph = new HashMap<>();
+        ArrayList<String> authors = getAuthors(tweets);
+
+        for (int i = 0; i < authors.size(); i++) {
+            Set<String> followers = new HashSet<>();
+            String currentAuthor = authors.get(i);
+
+            for (int j = 0; j < tweets.size(); j++) {
+                Tweet tweet = tweets.get(j);
+
+                if (tweet.getText().contains(currentAuthor) && !tweet.getAuthor().equals(currentAuthor)) {
+                    followers.add(tweet.getAuthor());
+                }
+            }
+            followerGraph.put(currentAuthor, followers);
+        }
+        return followerGraph;
     }
 
     /**
@@ -51,7 +65,35 @@ public class SocialNetwork {
      *         descending order of follower count.
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
+        List<String> influencers = new ArrayList<>();
+        for (String key: followsGraph.keySet()) {
+            for (String key2: followsGraph.keySet()) {
+                if (followsGraph.get(key).size() < followsGraph.get(key2).size()) {
+                    influencers.add(key2);
+                }
+            }
+        }
+        return influencers;
+    }
+
+    /**
+     *
+     * @param tweets
+     *         List of tweets
+     * @return
+     *         All authors of the tweets
+     */
+    private static ArrayList<String> getAuthors(List<Tweet> tweets) {
+        ArrayList<String> authors = new ArrayList<>();
+
+        for (int i = 0; i < tweets.size(); i++) {
+            String author = tweets.get(i).getAuthor();
+
+            if (!authors.contains(author)) {
+                authors.add(author);
+            }
+        }
+        return authors;
     }
 
     /* Copyright (c) 2007-2016 MIT 6.005 course staff, all rights reserved.
