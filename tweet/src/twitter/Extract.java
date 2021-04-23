@@ -128,7 +128,7 @@ public class Extract {
         for (int i = 0; i < usernames.length; i++) {
             String firstCharacter = String.valueOf(usernames[i].charAt(0));
             if (firstCharacter.equals("@")) {
-                returnUsernames.add(usernames[i]);
+                returnUsernames.add(usernames[i].replace("@", ""));
             }
         }
 

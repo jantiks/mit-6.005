@@ -50,7 +50,9 @@ public class SocialNetwork {
                     followers.add(tweet.getAuthor());
                 }
             }
-            followerGraph.put(currentAuthor, followers);
+            if (!followers.isEmpty()) {
+                followerGraph.put(currentAuthor, followers);
+            }
         }
         return followerGraph;
     }
@@ -66,14 +68,44 @@ public class SocialNetwork {
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
         List<String> influencers = new ArrayList<>();
+
+        // adding followsGraph's uesernames to the influencers
         for (String key: followsGraph.keySet()) {
-            for (String key2: followsGraph.keySet()) {
-                if (followsGraph.get(key).size() < followsGraph.get(key2).size()) {
-                    influencers.add(key2);
+            influencers.add(key);
+        }
+
+        // sorting influencers
+        for (int i = 0; i < influencers.size(); i++) {
+            String first = influencers.get(i);
+            for (int j = 0; j < i; j++) {
+                String second = influencers.get(j);
+                if (followsGraph.get(first).size() > followsGraph.get(second).size()) {
+                    influencers = swap(influencers, i, j);
                 }
             }
         }
+
         return influencers;
+    }
+
+
+    /**
+     *
+     * @param influencers
+     *          the list that should be swaped
+     * @param first
+     *           first index
+     * @param second
+     *           second index
+     * @return swaped list
+     *
+     */
+    private static List<String> swap(List<String> influencers, int first, int second) {
+        String c = influencers.get(first);
+        influencers.set(first, influencers.get(second));
+        influencers.set(second, c);
+        System.out.println("swaped " + c + " to " + influencers.get(first));
+        return  influencers;
     }
 
     /**
